@@ -9,9 +9,14 @@
 </head>
 <body>
     <div>
-        Views: {{ views }} <br/>
-        Loves: {{ loves }} <br/>
-        Faves: {{ faves }} <br/>
+        <a href="https://scratch.mit.edu/projects/{{ projectid }}"><h1>Project: {{ projectid }}</h1></a>
+        <h2>Stats:</h2>
+        <div>
+            Views: {{ views }} <br/>
+            Loves: {{ loves }} <br/>
+            Faves: {{ faves }} <br/>
+            Remixes: {{ remixes }} <br/>
+        </div>
     </div>
 </body>
 </html>

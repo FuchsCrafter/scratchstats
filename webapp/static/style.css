@@ -1,6 +1,22 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 10%;
+    padding-top: 0%;
+    text-align: center;
 }
-div{
-    margin: 10%;
+div {
+    margin: 5%;
+    margin-top: 0;
+}
+h1 {
+    text-align: center;
+    text-decoration: none;
+}
+a:hover {
+    color: rgb(129, 192, 201);
+    text-decoration: underline;
+}
+a {
+    text-decoration: none;
+    color:black;
 }

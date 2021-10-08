@@ -78,7 +78,6 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return render_template('index.html')
-
 @app.route('/kuchen')
 def cakes():
     return 'Kuchen? Kuchen. Kuchen! KUCHEN!'
@@ -94,10 +93,11 @@ def project(projectid):
         views = fetchedProject.getStats("views")
         loves = fetchedProject.getStats("loves")
         faves = fetchedProject.getStats("faves")
-        return render_template("project.html", projectid=projectid, views=views, loves=loves, faves=faves)
+        remixes = fetchedProject.getStats("remixes")
+        return render_template("project.html", projectid=projectid, views=views, loves=loves, faves=faves, remixes=remixes)
     except:
         return render_template("error_project.html", projectid=projectid)
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=80)
