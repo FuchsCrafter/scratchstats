@@ -72,19 +72,81 @@ class projects:
                 assets.append('https://cdn.assets.scratch.mit.edu/internalapi/asset/'+str(r['targets'][i]['sounds'][0]['md5ext'])+'/get')
         return assets
 
+class users:
+    def __init__(self, user):
+        self.user = user
+        self.headers = {
+            "x-csrftoken": "a",
+            "x-requested-with": "XMLHttpRequest",
+            "Cookie": "scratchcsrftoken=a;scratchlanguage=en;",
+            "referer": "https://scratch.mit.edu",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.101 Safari/537.36"
+        }
+
+    def exists(self):
+        return requests.get("https://api.scratch.mit.edu/accounts/checkusername/"+str(self.user)).json() == {"username": self.user, "msg": "username exists"}
+    
+    def getMessagesCount(self):
+        self.headers['referer'] = "https://scratch.mit.edu"
+        return requests.get("https://api.scratch.mit.edu/users/"+str(self.user)+"/messages/count").json()['count']
+    
+    def getMessages(self):
+        return requests.get("https://api.scratch.mit.edu/users/"+str(self.user)+"/messages" + "/", headers=self.headers).json()
+    
+    def getStatus(self):
+        return requests.get("https://api.scratch.mit.edu/users/"+str(self.user)).json()['profile']['status']
+    
+    def getBio(self):
+        return requests.get("https://api.scratch.mit.edu/users/"+str(self.user)).json()['profile']['bio']
+    
+    def getProjects(self):
+        r = requests.get(
+            "https://api.scratch.mit.edu/users/"+str(self.user)+"/projects")
+        data = r.json()
+        titles = []
+        for i in data:
+            x = i['title']
+            y = i['id']
+            titles.append('ID: ' + str(y))
+            titles.append('Title: ' + str(x))
+        return titles
+
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
 @app.route('/kuchen')
 def cakes():
     return 'Kuchen? Kuchen. Kuchen! KUCHEN!'
 
 @app.route('/user/<username>')
 def user(username):
-    return render_template('user.html', username=username)
+    try:
+        fetchedUser = users(username)
+        messagecount = fetchedUser.getMessagesCount()
+        bio = fetchedUser.getBio()
+        status = fetchedUser.getStatus()
+        userprojects = fetchedUser.getProjects()
+        return render_template('user.html', username=username, messagecount=messagecount, bio=bio, status=status, userprojects=userprojects)
+    except:
+        return render_template('error_user.html', username=username)
+
+@app.route('/existance/<username>')
+def existance(username):
+    try:
+        fetchedUser = users(username)
+        exists = fetchedUser.exists()
+        if exists:
+            return render_template('user_exists.html', username=username, userexists="")
+        else:
+            return render_template('user_exists.html', username=username, userexists="don't ")
+    except:
+        return render_template('error_user.html', username=username)
+
+
 
 @app.route('/project/<projectid>')
 def project(projectid):
