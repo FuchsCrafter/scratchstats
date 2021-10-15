@@ -9,13 +9,9 @@
 </head>
 <body>
     <div>
-        <a href="https://scratch.mit.edu/users/{{ username }}"><h1>User: {{ username }}</h1></a>
-        <h2>Data:</h2>
+        <h1>Checking if exists: {{ username }}</h1>
         <div>
-            Message count: {{ messagecount }} <br/>
-            BIO / About Me: {{ bio }} <br/>
-            Status / What I'm working on: {{ status }} <br/>
-            Projects: {{ userprojects }} <br/>
+            This user {{ userexists }}exists.
         </div>
     </div>
 </body>
