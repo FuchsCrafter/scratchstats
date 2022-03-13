@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 import requests
 import json
 
@@ -142,7 +142,7 @@ def existance(username):
         if exists:
             return render_template('user_exists.html', username=username, userexists="")
         else:
-            return render_template('user_exists.html', username=username, userexists="don't ")
+            return render_template('user_exists.html', username=username, userexists="doesn't ")
     except:
         return render_template('error_user.html', username=username)
 
@@ -159,6 +159,16 @@ def project(projectid):
         return render_template("project.html", projectid=projectid, views=views, loves=loves, faves=faves, remixes=remixes)
     except:
         return render_template("error_project.html", projectid=projectid)
+
+@app.route('/get')
+def get():
+
+  type =  request.args.get('type')
+  id = request.args.get('id')
+  try:
+    return redirect("{}/{}".format(type, id), code=302)
+  except:
+    return render_template("get.html", type="type", id="id")
 
 
 if __name__ == '__main__':
